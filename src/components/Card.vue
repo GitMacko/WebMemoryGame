@@ -12,7 +12,11 @@ export default {
     visible:{
         type: Boolean,
         default: false
-  }
+    },
+    dopasowana:{
+        type:Boolean,
+        default: false
+    }
   },
   setup(props,context){
 
@@ -20,7 +24,8 @@ export default {
 
 const wybierzKarte = () => 
 context.emit('wybierz-karte',{
-    position: props.position
+    position: props.position,
+    faceValue: props.value
 })
 return{
     wybierzKarte
