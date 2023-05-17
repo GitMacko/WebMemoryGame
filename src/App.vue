@@ -27,19 +27,39 @@ export default {
       const pozostaleKarty = TablicaKart.value.filter(
         karta => karta.dopasowana === false).length
 
-        return pozostaleKarty - 1
+        return pozostaleKarty
     })
 
+const zestawy = [1,2,3,4,5,6,7,8]
 
-    for(let i=0; i<9; i++){
-      TablicaKart.value.push({
-        value: 4,
-        visible: false,
-        position:i,
-        dopasowana: false
-    })
-      
+zestawy.forEach(item => {
+  TablicaKart.value.push({
+    value:item,
+    visible:false,
+    position:null,
+    matched:false
+  })
+
+  TablicaKart.value.push({
+    value:item,
+    visible:false,
+    position:null,
+    matched:false
+  })
+
+  TablicaKart.value = TablicaKart.value.map((karta,index) =>
+{
+  return {
+    ...karta,
+    position:index
   }
+})
+})
+
+
+
+
+
 
   const restartGry = () => {
     tasujTablice()
@@ -137,8 +157,8 @@ header {
 
 .plansza{
   display:grid;
-  grid-template-columns:100px 100px 100px;
-  grid-template-rows: 100px 100px 100px;
+  grid-template-columns:100px 100px 100px 100px;
+  grid-template-rows: 100px 100px 100px 100px;
   grid-column-gap: 30px;
   grid-row-gap: 30px;
 }

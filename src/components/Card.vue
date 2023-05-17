@@ -38,7 +38,7 @@ return{
 <template>
     <div class="karta" @click="wybierzKarte">
         <div v-if = "visible" class="strona-karty przod ">
-            {{ value }}
+            {{ value }} - {{ position }}
         </div>
         <div v-else class="strona-karty tyl">
             Tył
