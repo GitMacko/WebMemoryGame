@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import Card from './components/Card.vue'
 import { watch } from 'vue'
+import { computed } from '@vue/reactivity'
+import  _  from 'lodash'
 
 export default {
   name: 'WebMemoryGame',
@@ -12,18 +14,52 @@ export default {
   setup() {
     const TablicaKart = ref([])
     const rekaGracza = ref([])
-    const status = ref('')
+    //const status = ref('')
+
+    const status = computed(() =>{
+      if(pozostalePary.value == 0) {
+        return 'Wygrywasz!'
+      } else {
+        return `Pozostałe karty: ${pozostalePary.value}`
+     }  } )
+
+    const pozostalePary = computed(() => {
+      const pozostaleKarty = TablicaKart.value.filter(
+        karta => karta.dopasowana === false).length
+
+        return pozostaleKarty - 1
+    })
 
 
     for(let i=0; i<9; i++){
       TablicaKart.value.push({
-        value: 5,
+        value: 4,
         visible: false,
         position:i,
         dopasowana: false
     })
       
   }
+
+  const restartGry = () => {
+    tasujTablice()
+    TablicaKart.value = TablicaKart.value.map(
+      (karta, index) => {
+        return {
+          ...karta,
+          dopasowana: false,
+          visible: false,
+          position: index
+        }
+      }
+    )
+  }
+
+
+  const tasujTablice = () => {
+    TablicaKart.value = _.shuffle(TablicaKart.value)
+  }
+
   const odwrocKarte = (payload) =>{
   TablicaKart.value[payload.position].visible = true
   if(rekaGracza.value[0]) {
@@ -36,10 +72,9 @@ export default {
       const kartaPierwsza = currentValue[0]
       const kartaDruga = currentValue[1]
       if(kartaPierwsza.faceValue === kartaDruga.faceValue){
-        status.value = 'Dopasowano!'
         TablicaKart.value[kartaPierwsza.position].dopasowana = true
         TablicaKart.value[kartaDruga.position].dopasowana = true
-      } else {status.value = 'Źle!'
+      } else {
       TablicaKart.value[kartaPierwsza.position].visible = false
       TablicaKart.value[kartaDruga.position].visible = false}
 
@@ -51,7 +86,10 @@ export default {
       TablicaKart,
       odwrocKarte,
       rekaGracza,
-      status
+      status,
+      pozostalePary,
+      tasujTablice,
+      restartGry
     }
   },
 
@@ -68,7 +106,7 @@ export default {
  <section class = "plansza">
 
   <Card v-for = "(karta, index) in TablicaKart" 
-   :key="`card-${index}`" 
+   :key="`card-${index}` "
    :value="karta.value" 
    @wybierz-karte="odwrocKarte" 
    :position="karta.position"
@@ -77,7 +115,9 @@ export default {
    />
 
  </section>
- <h2>{{ status }} - {{ dopasowana }}</h2>
+ <h2>{{ status }}</h2>
+<p>Pozostale karty: {{ pozostalePary }}</p>
+<button @click="restartGry">Restart</button>
 </template>
 
 
