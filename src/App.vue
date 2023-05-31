@@ -83,6 +83,10 @@ zestawy.forEach(item => {
   const odwrocKarte = (payload) =>{
   TablicaKart.value[payload.position].visible = true
   if(rekaGracza.value[0]) {
+    if(
+      rekaGracza.value[0].position ===
+    payload.position && rekaGracza.value[0].faceValue === payload.faceValue)
+    { return } else { }
     rekaGracza.value[1] = payload
   } else {rekaGracza.value[0] = payload}
   }
@@ -95,10 +99,11 @@ zestawy.forEach(item => {
         TablicaKart.value[kartaPierwsza.position].dopasowana = true
         TablicaKart.value[kartaDruga.position].dopasowana = true
       } else {
-      TablicaKart.value[kartaPierwsza.position].visible = false
-      TablicaKart.value[kartaDruga.position].visible = false}
-
-
+      setTimeout( () => {
+          TablicaKart.value[kartaPierwsza.position].visible = false
+          TablicaKart.value[kartaDruga.position].visible = false
+        }, 2000)
+      }
       rekaGracza.value.length = 0}
     }, {deep: true})
 
